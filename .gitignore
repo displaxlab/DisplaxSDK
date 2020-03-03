@@ -1,0 +1,8 @@
+*.pro.user
+*.tmp
+*.o
+.DS_Store
+*.pro.*
+*build-*
+*.user
+
