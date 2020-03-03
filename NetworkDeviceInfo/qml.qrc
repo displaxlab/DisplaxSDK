@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>SensorIcon.qml</file>
+        <file>ComputerIcon.qml</file>
+    </qresource>
+</RCC>
