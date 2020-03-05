@@ -5,8 +5,6 @@ import QtQml 2.14
 import QtQuick.Layouts 1.14
 import com.displax.sdk 1.0
 
-import QtQuick.Shapes 1.14
-
 ApplicationWindow {
     visible: true
     minimumWidth: 640
