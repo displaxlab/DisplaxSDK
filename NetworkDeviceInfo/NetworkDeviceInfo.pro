@@ -35,3 +35,6 @@ else:unix: LIBS += -L$$OUT_PWD/../client-lib/ -lclient-lib
 
 INCLUDEPATH += $$PWD/../client-lib $$PWD/../client-lib/base
 DEPENDPATH += $$PWD/../client-lib $$PWD/../client-lib/base
+
+DISTFILES += \
+    readme.md
