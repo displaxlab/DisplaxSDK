@@ -32,3 +32,6 @@ DEPENDPATH += $$PWD/../client-lib/base $$PWD/../client-lib
 
 HEADERS += \
     main.h
+
+DISTFILES += \
+    readme.md
