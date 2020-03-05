@@ -28,7 +28,7 @@
 namespace Displax {
 
 Session::Session(DPXComConnection* parent)
-    : QObject(parent)
+    : EntityContext(parent)
     , m_connection(parent)
     , m_valid(true)
     , m_id(0)

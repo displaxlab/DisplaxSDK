@@ -13,7 +13,7 @@ namespace Displax {
 
 class DPXComConnection;
 
-class DPX_EXPORT Session: public QObject, public EntityContext
+class DPX_EXPORT Session: public EntityContext
 {
     Q_OBJECT
     Q_PROPERTY(QString url READ url NOTIFY urlChanged)

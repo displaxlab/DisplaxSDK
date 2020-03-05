@@ -1,15 +1,18 @@
 #ifndef ENTITYCONTEXT_H
 #define ENTITYCONTEXT_H
 
-#include <displaxclientlib_global.h>
+#include <QObject>
 #include <QString>
+#include <displaxclientlib_global.h>
 
 namespace Displax {
 
-class DPX_EXPORT EntityContext
+class DPX_EXPORT EntityContext: public QObject
 {
+    Q_OBJECT
+
 public:
-    EntityContext() = default;
+    EntityContext(QObject* parent = nullptr);
     virtual ~EntityContext() = default;
 
     virtual void insertEntity(Entity* e) = 0;
