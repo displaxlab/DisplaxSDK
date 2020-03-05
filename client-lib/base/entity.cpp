@@ -18,6 +18,7 @@ namespace Displax {
 Entity::Entity(QObject* parent)
     : QObject(parent)
     , m_id(QUuid::createUuid().toString())
+    , m_context(nullptr)
     , m_dirty(true)
     , m_initialised(false)
     , m_notify(true)
@@ -141,6 +142,11 @@ void Entity::setNotify(bool notify)
             m_context->activateNotify(this);
         emit notifyChanged();
     }
+}
+
+bool Entity::isValid() const
+{
+    return m_context && !m_name.isEmpty();
 }
 
 /*!

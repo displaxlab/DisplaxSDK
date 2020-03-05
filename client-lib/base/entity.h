@@ -43,6 +43,8 @@ public:
     bool isNotify() const;
     void setNotify(bool notify);
 
+    bool isValid() const;
+
 signals:
     void dirtyChanged();
     void initialisedChanged();
