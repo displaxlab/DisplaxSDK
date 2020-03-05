@@ -10,7 +10,6 @@
     methods.
 */
 
-
 #include "entity.h"
 #include <QUuid>
 

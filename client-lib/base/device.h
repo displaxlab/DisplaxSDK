@@ -10,7 +10,7 @@
 
 namespace Displax {
 
-class DPX_EXPORT Device: public QObject, public EntityContext
+class DPX_EXPORT Device: public EntityContext
 {
     Q_OBJECT
     Q_PROPERTY(int productId READ productId NOTIFY productIdChanged)

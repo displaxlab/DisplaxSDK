@@ -19,7 +19,7 @@
 namespace Displax {
 
 Device::Device(Session* parent)
-    : QObject(parent)
+    : EntityContext(parent)
     , m_product_id(0)
     , m_type("None")
     , m_valid(false)
@@ -30,8 +30,13 @@ Device::Device(Session* parent)
 
 Device::~Device()
 {
-    for(auto i = m_entities.begin(), e = m_entities.end(); i != e; ++i)
-        (*i)->setContext(nullptr);
+    auto i = m_entities.begin();
+    while(i != m_entities.end())
+    {
+        auto e = i.value();
+        i = m_entities.erase(i);
+        e->setContext(nullptr);
+    }
 }
 
 /*!
