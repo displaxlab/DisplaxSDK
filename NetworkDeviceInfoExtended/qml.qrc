@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>DeviceIcon.qml</file>
+        <file>ComputerIcon.qml</file>
+        <file>DeviceWindow.qml</file>
+        <file>EntityView_int.qml</file>
+        <file>EntityView_String.qml</file>
+        <file>EntityView_float.qml</file>
+        <file>EntityView_Enum.qml</file>
+        <file>EntityView_bool.qml</file>
+    </qresource>
+</RCC>
