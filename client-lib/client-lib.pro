@@ -11,6 +11,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += communication base
 
 SOURCES += \
+    base/entitybool.cpp \
+    base/entitycontext.cpp \
+    base/entityenum.cpp \
+    base/entityfloat.cpp \
+    base/entityframe.cpp \
+    base/entityfunction.cpp \
+    base/entityint.cpp \
+    base/entityjsonvalue.cpp \
+    base/entitystring.cpp \
     dpxclientlib.cpp \
     communication/dpxcomconnection.cpp \
     communication/dpxcommanager.cpp \
@@ -23,6 +32,14 @@ SOURCES += \
     base/sessionmanager.cpp
 
 HEADERS += \
+    base/entitybool.h \
+    base/entityenum.h \
+    base/entityfloat.h \
+    base/entityframe.h \
+    base/entityfunction.h \
+    base/entityint.h \
+    base/entityjsonvalue.h \
+    base/entitystring.h \
     displaxclientlib_global.h \
     dpxclientlib.h \
     communication/dpxcomconnection.h \
