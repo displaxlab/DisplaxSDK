@@ -74,7 +74,7 @@ void EntityFunction::setParameters(const QVariant& parameters)
     emit parametersChanged();
 }
 
-void EntityFunction::run()
+void EntityFunction::execute()
 {
     if(isValid())
         context()->activateEntity(this);

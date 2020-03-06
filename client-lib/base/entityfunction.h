@@ -29,7 +29,7 @@ public:
     QVariant parameters() const;
     void setParameters(const QVariant& parameters);
 
-    Q_INVOKABLE void run();
+    Q_INVOKABLE void execute();
 
     QVariant result() const;
 

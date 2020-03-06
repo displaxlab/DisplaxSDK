@@ -326,11 +326,22 @@ void Session::removeDevice(const QString& serial_number)
         Device* device = m_devices.take(serial_number);
         m_devices_qml = m_devices.values();
 
-        for(auto i = m_active_actions.constBegin(), e = m_active_actions.constEnd(); i != e; ++i)
-            if(i.value()->entity()->context() == device)
-                delete m_active_actions.take(i.key());
+        auto i = m_active_actions.begin();
+        while(i != m_active_actions.end())
+        {
+            auto entity = i.value()->entity();
+            if(entity == nullptr || (entity && entity->context() == device))
+            {
+                auto tmp = i.value();
+                i = m_active_actions.erase(i);
+                delete tmp;
+            }
+            else
+                ++i;
+        }
 
         device->invalidate();
+        emit deviceRemoved(device);
         emit devicesChanged();
         device->deleteLater();
     }
@@ -465,10 +476,17 @@ Device* Session::device(const QString& serial_number)
 void Session::updateDevice(const QJsonObject& data)
 {
     const QString serial_number = data.value("serial_number").toString();
-    if(!m_devices.contains(serial_number))
-        m_devices[serial_number] = new Device(this);
-
-    m_devices[serial_number]->updateJsonData(data);
+    if(m_devices.contains(serial_number))
+    {
+        m_devices[serial_number]->updateJsonData(data);
+    }
+    else
+    {
+        auto device = new Device(this);
+        m_devices[serial_number] = device;
+        device->updateJsonData(data);
+        emit deviceInserted(device);
+    }
 }
 
 void Session::parseDevicesAll(const QJsonObject& o)
