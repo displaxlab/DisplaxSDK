@@ -39,3 +39,6 @@ DEPENDPATH += $$PWD/../client-lib $$PWD/../client-lib/base
 
 HEADERS += \
     frameviewer.h
+
+DISTFILES += \
+    readme.md
