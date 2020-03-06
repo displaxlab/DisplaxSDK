@@ -59,6 +59,8 @@ signals:
     void validChanged();
     void isLocalChanged();
     void devicesChanged();
+    void deviceInserted(Displax::Device* device);
+    void deviceRemoved(Displax::Device* device);
     void receiveCli(const QJsonArray& arr);
 
 private slots:
