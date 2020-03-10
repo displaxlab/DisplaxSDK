@@ -61,3 +61,5 @@ unix {
 }
 !isEmpty(target.path): INSTALLS += target
 
+DISTFILES += \
+    readme.md
