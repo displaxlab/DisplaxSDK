@@ -9,4 +9,6 @@ SUBDIRS += \
     NetworkDeviceInfoExtended \
     client-lib
 
-
+DISTFILES += \
+    license.txt \
+    readme.md
