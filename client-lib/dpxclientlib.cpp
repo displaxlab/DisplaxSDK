@@ -8,6 +8,7 @@
 #include <entityfunction.h>
 #include <entityint.h>
 #include <entityjsonvalue.h>
+#include <entitysettings.h>
 #include <entitystring.h>
 #include <sessionmanager.h>
 
@@ -22,8 +23,9 @@ void Displax::registerQmlTypes()
 
     qmlRegisterUncreatableType<Displax::Entity>("com.displax.sdk", major, minor, "Entity",
                                                 "Can not instantiate Entity in qml");
-    qmlRegisterUncreatableType<Displax::EntityContext>("com.displax.sdk", major, minor, "EntityContext",
-                                                "Can not instantiate Entity in qml");
+    qmlRegisterUncreatableType<Displax::EntityContext>("com.displax.sdk", major, minor,
+                                                       "EntityContext",
+                                                       "Can not instantiate Entity in qml");
     qmlRegisterType<Displax::EntityBool>("com.displax.sdk", major, minor, "EntityBool");
     qmlRegisterType<Displax::EntityInt>("com.displax.sdk", major, minor, "EntityInt");
     qmlRegisterType<Displax::EntityFloat>("com.displax.sdk", major, minor, "EntityFloat");
@@ -32,4 +34,5 @@ void Displax::registerQmlTypes()
     qmlRegisterType<Displax::EntityFrame>("com.displax.sdk", major, minor, "EntityFrame");
     qmlRegisterType<Displax::EntityFunction>("com.displax.sdk", major, minor, "EntityFunction");
     qmlRegisterType<Displax::EntityEnum>("com.displax.sdk", major, minor, "EntityEnum");
+    qmlRegisterType<Displax::EntitySettings>("com.displax.sdk", major, minor, "EntitySettings");
 }
