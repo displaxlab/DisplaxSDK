@@ -7,7 +7,7 @@
 #define DPX_EXPORT Q_DECL_EXPORT
 #define DPX_HIDDEN Q_DECL_HIDDEN
 #else
-#define DPX_EXPORT Q_DECL_IMPORT
+#define DPX_EXPORT
 #define DPX_HIDDEN
 #endif
 

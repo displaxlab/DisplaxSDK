@@ -1,13 +1,13 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    client-lib \
     BasicPrintDeviceInfo \
     DeviceFrameTouch \
     DeviceLoadSaveSettings \
     DeviceReset \
     NetworkDeviceInfo \
     NetworkDeviceInfoExtended \
-    client-lib
 
 DISTFILES += \
     license.txt \
