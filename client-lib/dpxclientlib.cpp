@@ -10,6 +10,7 @@
 #include <entityjsonvalue.h>
 #include <entitysettings.h>
 #include <entitystring.h>
+#include <entitytouchevents.h>
 #include <sessionmanager.h>
 
 void Displax::registerQmlTypes()
@@ -35,4 +36,6 @@ void Displax::registerQmlTypes()
     qmlRegisterType<Displax::EntityFunction>("com.displax.sdk", major, minor, "EntityFunction");
     qmlRegisterType<Displax::EntityEnum>("com.displax.sdk", major, minor, "EntityEnum");
     qmlRegisterType<Displax::EntitySettings>("com.displax.sdk", major, minor, "EntitySettings");
+    qmlRegisterType<Displax::EntityTouchEvents>("com.displax.sdk", major, minor,
+                                                "EntityTouchEvents");
 }

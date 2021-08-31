@@ -22,6 +22,7 @@ SOURCES += \
     base/entityjsonvalue.cpp \
     base/entitysettings.cpp \
     base/entitystring.cpp \
+    base/entitytouchevents.cpp \
     dpxclientlib.cpp \
     communication/dpxcomconnection.cpp \
     communication/dpxcommanager.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     base/entityjsonvalue.h \
     base/entitysettings.h \
     base/entitystring.h \
+    base/entitytouchevents.h \
     displaxclientlib_global.h \
     dpxclientlib.h \
     communication/dpxcomconnection.h \
