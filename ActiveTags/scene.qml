@@ -43,7 +43,7 @@ Entity {
                 if(obj1 == null || (obj1 && obj1.in_contact && obj2 == null)) {
                     srcTouches.setEntityProperty({"action": "joystick",
                                                      "enable": false,
-                                                     "tag_id": joystick_identifier});
+                                                     "identifier": joystick_identifier});
                     joystick_mode = false;
                     joystick_tag_up = false;
                     joystick_identifier = 0;
@@ -52,6 +52,13 @@ Entity {
                 // If tag rise, activate.
                 if(!obj1.in_contact && !joystick_tag_up) {
                     joystick_tag_up = true;
+                    // Send color effect.
+                    srcTouches.setEntityProperty({"action": "color_effect",
+                                                  "color": "white",
+                                                  "effect": 2,
+                                                  "time": 200,
+                                                  "cycles": 1,
+                                                  "tag_id": obj1.tag_id});
                     return;
                 }
             } else {
@@ -63,6 +70,20 @@ Entity {
                                                          "tag_id": arr[i].tag_id});
                         joystick_mode = true;
                         joystick_identifier = arr[i].identifier;
+                        // On enter, send color effect
+                        srcTouches.setEntityProperty({"action": "color_effect",
+                                                      "color": "blue",
+                                                      "effect": 1,
+                                                      "time": 500,
+                                                      "cycles": 2,
+                                                      "tag_id": arr[i].tag_id});
+                        // and vibration effect
+                        srcTouches.setEntityProperty({"action": "vibration_effect",
+                                                      "level": "50",
+                                                      "time_on": 100,
+                                                      "time_off": 200,
+                                                      "cycles": 2,
+                                                      "tag_id": arr[i].tag_id});
                         return;
                     }
                 }
