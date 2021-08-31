@@ -8,6 +8,7 @@ SUBDIRS += \
     DeviceReset \
     NetworkDeviceInfo \
     NetworkDeviceInfoExtended \
+    ActiveTags \
 
 DISTFILES += \
     license.txt \
