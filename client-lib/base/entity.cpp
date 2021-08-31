@@ -55,6 +55,7 @@ void Entity::setName(const QString& name)
         if(m_context && !m_name.isEmpty())
             m_context->removeEntity(this);
 
+        setInitialised(false);
         m_name = name;
 
         if(m_context && !m_name.isEmpty())
@@ -81,6 +82,7 @@ void Entity::setContext(EntityContext* ctx)
         if(m_context && !m_name.isEmpty())
             m_context->removeEntity(this);
 
+        setInitialised(false);
         m_context = ctx;
 
         if(m_context && !m_name.isEmpty())
