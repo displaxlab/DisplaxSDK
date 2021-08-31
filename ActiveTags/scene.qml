@@ -257,8 +257,19 @@ Entity {
                     translation: joystick
                                  ? Qt.vector3d(device_width/2, 300, device_height/2)
                                  : Qt.vector3d(modelData.x, 30, modelData.y)
-                    rotationX: joystick ? modelData.tilt_x : 0
-                    rotationZ: joystick ? modelData.tilt_y : 0
+
+                    // Choose only one rotation approach.
+
+                    // Rotation in hemisphere:
+                    // rotationX: joystick ? modelData.tilt_x : 0
+                    // rotationZ: joystick ? modelData.tilt_y : 0
+
+                    // Rotation in full globe:
+                    rotation: joystick ? fromAxisAndAngle(Math.sin(modelData.tilt_x * Math.PI / 180),
+                                                          0,
+                                                          Math.sin(modelData.tilt_y * Math.PI / 180),
+                                                          90 - modelData.tilt_z)
+                                       : "1, 0, 0, 0"
                 }
             ]
         }
