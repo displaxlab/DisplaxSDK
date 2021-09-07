@@ -285,11 +285,14 @@ Entities are an array of touch entities. Each touch entity contain:
 * `identifier` - unique id
 * `x`
 * `y`
+* `x_calibrated`
+* `y_calibrated`
 * `width`
 * `height`
 * `radius`
 * `pressure`
 * `rotation`
+* `rotation_calibrated`
 * `tilt_x`
 * `tilt_y`
 * `color`
@@ -297,7 +300,81 @@ Entities are an array of touch entities. Each touch entity contain:
 * `eraser`
 * `nested_entities` (an array of touch entities)
 
+Only type, subtype, identifier, x and y are mandatory. Others are optional.
+
 For user interface iteraction, with touches, use TUIO protocol instead.
+
+### TouchEntitiesActive
+
+TouchEntitiesActive extends TouchEntities adding active tags support.
+All new fields are optional:
+
+* `tilt_z`
+* `name`
+* `battery_level`
+* `tap`
+* `double_tap`
+* `in_range`
+* `in_contact`
+* `tag_id`
+
+In addition, you can send effects or change certain properties to active tags.
+For that, you must send a JSON object with pair, key value, `actions` array.
+For each array element (object), this must contain a `action` and `tag_id`. An action can be:
+
+* `color_effect` sends a color effect to respective active tag
+    * `color` string color (SVG color names) or #rrggbb format.
+    * `effect` can be one of the following values:
+        * 0 fade
+        * 1 blink
+        * 2 short pulse
+        * 3 triangular wave
+        * 4 tooth saw wave
+        * 5 heart beat
+    * `time` duration of effect cycle in ms
+    * `cycles` repeat effect
+* `vibration_effect` sends a vibration effect for respective active tag
+    * `level` a integer between 0 and 100
+    * `time_on` dutty cycle on (ms)
+    * `time_off` dutty cycle off (ms)
+    * `cycles` repeat effect
+* `joystick`
+    * `enable` true or false. Enable joystick mode for respective tag. Only one tag can be in joystick mode.
+
+An example:
+
+```json
+{
+    ...
+    {
+        "actions": [
+            {
+                "action": "color_effect",
+                "tag_id": some_tag_id,
+                "color": "red",
+                "effect": 2,
+                "time": 600,
+                "cycles": 3
+            },
+            {
+                "action": "vibration_effect",
+                "tag_id": some_tag_id,
+                "level": 80,
+                "time_on": 400,
+                "time_off": 750,
+                "cycles": 2
+            },
+            {
+                "action": "joystick",
+                "tag_id": some_tag_id,
+                "enable": "true"
+            }
+        ],
+        ...
+    }
+    ...
+}
+```
 
 ### DeviceSettings
 

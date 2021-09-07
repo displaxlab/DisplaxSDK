@@ -20,3 +20,4 @@ __Examples__:
 * [Device Frame Touch](DeviceFrameTouch/readme.md)
 * [Device Reset](DeviceReset/readme.md)
 * [Device Load Save Settings](DeviceLoadSaveSettings/readme.md)
+* [Active Tags](ActiveTags/readme.md)
