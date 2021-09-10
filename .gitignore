@@ -6,3 +6,8 @@
 *build-*
 *.user
 
+.vs
+CSharp\ (Unity\ framework)/Library
+CSharp\ (Unity\ framework)/Logs
+CSharp\ (Unity\ framework)/Temp
+

@@ -1,8 +1,8 @@
-# Displax SDK & Examples
+# Displax C++ (Qt framework) SDK & Examples
 
-Displax SDK is a small library that provides access to Displax Service.
+Displax C++ (Qt framework) SDK is a small library, intended for application development using C++ and Qt framework, that provides access to Displax Service.
 
-This provide library source code and simple examples.
+This SDK provide library source code and simple examples.
 The project is in qmake.
 
 * [License](license.txt)
