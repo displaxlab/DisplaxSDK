@@ -5,6 +5,7 @@
 *.pro.*
 *build-*
 *.user
+.vs
 
 .vs
 CSharp\ (Unity\ framework)/Library
