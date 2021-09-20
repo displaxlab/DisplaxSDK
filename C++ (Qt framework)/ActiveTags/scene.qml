@@ -261,13 +261,13 @@ Entity {
                     // Choose only one rotation approach.
 
                     // Rotation in hemisphere:
-                    // rotationX: joystick ? modelData.tilt_x : 0
-                    // rotationZ: joystick ? modelData.tilt_y : 0
+                    // rotationX: joystick ? modelData.tilt_x * 180 / Math.PI : 0
+                    // rotationZ: joystick ? modelData.tilt_y * 180 / Math.PI : 0
 
                     // Rotation in full globe:
-                    rotation: joystick ? fromAxisAndAngle(Math.sin(modelData.tilt_x * Math.PI / 180),
+                    rotation: joystick ? fromAxisAndAngle(Math.sin(modelData.tilt_x),
                                                           0,
-                                                          Math.sin(modelData.tilt_y * Math.PI / 180),
+                                                          Math.sin(modelData.tilt_y),
                                                           90 - modelData.tilt_z)
                                        : "1, 0, 0, 0"
                 }
