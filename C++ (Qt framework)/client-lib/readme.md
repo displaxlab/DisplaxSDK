@@ -301,8 +301,7 @@ Entities are an array of touch entities. Each touch entity contain:
 * `nested_entities` (an array of touch entities)
 
 Only type, subtype, identifier, x and y are mandatory. Others are optional.
-
-For user interface iteraction, with touches, use TUIO protocol instead.
+Angular fields are in radians.
 
 ### TouchEntitiesActive
 
