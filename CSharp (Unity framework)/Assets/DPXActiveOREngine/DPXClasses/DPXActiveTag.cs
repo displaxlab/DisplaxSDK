@@ -20,13 +20,13 @@ namespace DPXClasses
         public string name;
         public int pressure;
         public int radius;
-        public int rotation;
-        public int rotation_calibrated;
+        public float rotation;
+        public float rotation_calibrated;
         public int subtype;
         public bool tap;
-        public int tilt_x;
-        public int tilt_y;
-        public int tilt_z;
+        public float tilt_x;
+        public float tilt_y;
+        public float tilt_z;
         public int type; // None = 0, Pointer/touch = 1, (passive) 3-point tag = 2, (passive) 4-point tag = 3, (passive) 3-point tag+ = 4, (passive) 4-point tag+ = 5, Pen = 6, Active Tag = 7
         public int width;
         public int x;

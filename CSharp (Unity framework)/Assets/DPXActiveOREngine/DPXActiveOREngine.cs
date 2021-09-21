@@ -311,7 +311,14 @@ public class DPXActiveOREngine : MonoBehaviour
                     // check if only valid ID tags should be reported
                     if (tag.tag_id < 65535 || !onlyValidTagIDs)
                     {
-                        //translate coords to match screen coordinates
+                        // convert rotation and tilt values from radians to degrees
+                        tag.rotation = (int)(tag.rotation * (180 / Math.PI));
+                        tag.rotation_calibrated = (int)(tag.rotation_calibrated * (180 / Math.PI));
+                        tag.tilt_x = (int)(tag.tilt_x * (180 / Math.PI));
+                        tag.tilt_y = (int)(tag.tilt_y * (180 / Math.PI));
+                        tag.tilt_z = (int)(tag.tilt_z * (180 / Math.PI));
+
+                        // translate coords to match screen coordinates
                         // skip when coordinates are "off-screen" (when x or y values are 65535)
                         if (tag.x < 65535 && tag.y < 65535 && tag.x_calibrated < 65535 && tag.y_calibrated < 65535)
                         {
