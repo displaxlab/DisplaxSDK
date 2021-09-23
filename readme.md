@@ -2,7 +2,7 @@
 
 Displax SDK is a bundle of small libraries that provides access to Displax Service.
 
-* [License](license.txt)
+* [License](C++%20(Qt%20framework)/license.txt)
 
 This bundle supports the following frameworks:
 
