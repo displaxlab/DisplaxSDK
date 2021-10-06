@@ -1,10 +1,10 @@
-import QtQuick 2.15 as QQ2
-import QtQml.Models 2.15 as QQM
+import QtQuick 2.14 as QQ2
+import QtQml.Models 2.14 as QQM
 import com.displax.sdk 1.0
 import Qt3D.Core 2.0
 import Qt3D.Render 2.9
 import Qt3D.Input 2.0
-import Qt3D.Extras 2.15
+import Qt3D.Extras 2.14
 
 Entity {
     id: root
