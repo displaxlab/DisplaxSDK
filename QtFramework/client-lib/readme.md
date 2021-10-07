@@ -5,6 +5,8 @@ Allows a fast implementation and code reuse.
 
 The protocol communication between service and client relies on TCP/IP with JSON Qt binary format.
 
+> :warning: **Displax Service isn't compatible with Qt 5.15**, so use until Qt 5.14.
+
 ## Communication
 
 This module discovers remote services and establishes a connection with them.
