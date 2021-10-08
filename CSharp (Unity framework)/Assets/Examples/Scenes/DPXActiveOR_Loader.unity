@@ -197,9 +197,10 @@ MonoBehaviour:
   remotePort: 45001
   useFirstAvailableController: 1
   controllerSerialNumber: 
-  translateTagCoordsToScreen: 1
-  invertXCalibratedCoords: 1
-  invertYCalibratedCoords: 0
+  translateTagCoordsToScreenResolution: 1
+  usePlayerWindowResolution: 0
+  invertXCalibratedCoords: 0
+  invertYCalibratedCoords: 1
   onlyValidTagIDs: 1
   ignoreTapWhenTagIsVibrating: 1
   tag_prefab: {fileID: 4532842644569014295, guid: 7405338b584f61148bc8ca580cf52f49,

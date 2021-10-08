@@ -112,11 +112,15 @@ public class ActiveTag : MonoBehaviour
             // update all the needed properties and/or behaviours
             // update tag position
             var spriteObj = transform.Find("TagSprite");
-            transform.position = Vector3.Slerp(transform.position, Camera.main.ScreenToWorldPoint(new Vector3(tagData.x_calibrated - 30, tagData.y_calibrated + 30, 1)), Time.deltaTime * 20);
+
+            float b_x = m_buttonprefab.GetComponent<SpriteRenderer>().bounds.size.x;
+            float b_y = m_buttonprefab.GetComponent<SpriteRenderer>().bounds.size.y;
+            transform.position = Vector3.Slerp(transform.position, Camera.main.ScreenToWorldPoint(new Vector3((float)(tagData.x_calibrated+b_x/2), tagData.y_calibrated-b_y/2, 1)), Time.deltaTime * 20);
 
             // update Sprite rotation
             if (spriteObj != null)
-                spriteObj.rotation = Quaternion.Euler(0, 0, tagData.rotation_calibrated);
+                spriteObj.rotation = Quaternion.Euler(0, 0, 360 - tagData.rotation_calibrated);
+
 
             // check angle range (to enable haptics, if necessary)
             int anglerange = 360 / numberOfObjects;
@@ -126,7 +130,7 @@ public class ActiveTag : MonoBehaviour
                 {
                     Vector3 scaleDiff =  new Vector3(5f, 5f, 0);
 
-                    switch (((int)((tagData.rotation_calibrated + anglerange / 2) / anglerange))% numberOfObjects)
+                    switch (((int)(((360-tagData.rotation_calibrated+180)%360 + anglerange / 2) / anglerange))% numberOfObjects)
                     {
                         case 0: 
                             m_colorEffect = ActiveTagColorEffect.FadeToColor;
