@@ -15,11 +15,13 @@ __Dependencies__:
 
 __Examples__:
 * [Basic Print Device Info](BasicPrintDeviceInfo/readme.md)
+* [Device Reset](DeviceReset/readme.md)
+* [Device Load Save Settings](DeviceLoadSaveSettings/readme.md)
 * [Network Device Info](NetworkDeviceInfo/readme.md)
 * [Network Device Info Extended](NetworkDeviceInfoExtended/readme.md)
 * [Device Frame Touch](DeviceFrameTouch/readme.md)
-* [Device Reset](DeviceReset/readme.md)
-* [Device Load Save Settings](DeviceLoadSaveSettings/readme.md)
 * [Active Tags](ActiveTags/readme.md)
+
+> :warning: **You must try examples sequentially to gain knowledge about how the system works**
 
 > :warning: **Displax Service isn't compatible with Qt 5.15.**
