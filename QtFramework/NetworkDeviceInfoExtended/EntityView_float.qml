@@ -9,17 +9,19 @@ Item {
     property var context;
     anchors.fill: parent
 
+    // Entity float controller
     EntityFloat {
         id: src
 
         Component.onCompleted: {
-            updateProtoEntity(proto);
-            context = int_root.context
+            updateProtoEntity(proto); // set proto entity
+            context = int_root.context // set device context
         }
 
         onInitialisedChanged: {
             if(initialised && !dirty)
             {
+                // For normalized values load slider, otherwise load spin box.
                 if(max-min===1)
                     my_loader.sourceComponent = slider;
                 else
@@ -32,6 +34,7 @@ Item {
         id: my_loader
     }
 
+    // View interface for normalized values
     Component {
         id: slider
         Slider {
@@ -41,6 +44,7 @@ Item {
         }
     }
 
+    // Default view interface
     Component {
         id: spinBox
         SpinBox {

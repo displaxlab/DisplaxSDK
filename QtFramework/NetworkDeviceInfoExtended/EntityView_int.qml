@@ -9,17 +9,22 @@ Item {
     property var context;
     anchors.fill: parent
 
+    // Entity Int controller
     EntityInt {
         id: src
 
         Component.onCompleted: {
-            updateProtoEntity(proto);
-            context = int_root.context
+            updateProtoEntity(proto); // set proto entity
+            context = int_root.context // set device context
         }
 
         onInitialisedChanged: {
             if(initialised && !dirty)
             {
+                // If value is 0 or 1, loads bool switch
+                // If is a tri value load special tri state switch
+                // If value is between 0 and 100 loads slider
+                // Otherwise loads a spin box.
                 if(max-min===1)
                     my_loader.sourceComponent = switch1;
                 else if(max-min===2)

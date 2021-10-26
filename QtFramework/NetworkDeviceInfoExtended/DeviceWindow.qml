@@ -40,6 +40,8 @@ Window {
             ScrollBar.vertical.interactive: true
 
             Column {
+                // Iterate for each device entity
+                // for each valid entity create a label with entity name, and view handle to manipulate value.
                 Repeater {
                     id: list_view
                     property int count : 0;
@@ -53,6 +55,7 @@ Window {
                     Row {
                         y:2
                         height: 50
+                        // Filter entity type: string, int, float, enum or bool
                         visible: modelData.type === "String" || modelData.type === "int" || modelData.type === "float"  || modelData.type === "Enum" || modelData.type === "bool"
                         property bool odd: false
 
@@ -75,7 +78,7 @@ Window {
                                 x: 30
                                 y: (parent.height - height)/2
                                 font.pixelSize: 14
-                                text: entityName2Human(modelData.name)
+                                text: entityName2Human(modelData.name) // show a pretty name
                             }
                         }
 
@@ -86,7 +89,7 @@ Window {
                             color: odd ? Material.backgroundColor: Material.frameColor
                             Component.onCompleted: {
                                 if(parent.visible)
-                                {
+                                { // load respective view handle
                                     var component = Qt.createComponent("EntityView_" + modelData.type + ".qml");
                                     if (component.status === Component.Ready)
                                         component.createObject(entity_view, { proto: modelData, context: device});

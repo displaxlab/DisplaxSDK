@@ -9,18 +9,20 @@ Item {
     property var context;
     anchors.fill: parent
 
+    // Entity Enum controller
     EntityEnum {
         id: src
         Component.onCompleted: {
-            updateProtoEntity(proto);
-            context = int_root.context
+            updateProtoEntity(proto); // set proto entity
+            context = int_root.context // set device context
         }
     }
 
+    // View interface
     ComboBox {
         width: 200
-        model: proto.values
-        currentIndex: proto.values.indexOf(src.value)
+        model: proto.values // list of all possible enum values
+        currentIndex: proto.values.indexOf(src.value) // current value
         onCurrentIndexChanged: {
             src.value = proto.values[currentIndex];
         }
