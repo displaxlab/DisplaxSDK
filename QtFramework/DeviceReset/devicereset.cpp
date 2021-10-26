@@ -6,6 +6,7 @@
 DeviceReset::DeviceReset(int timeout, QObject* parent)
     : QObject(parent)
 {
+    // After timeout, in milliseconds, quit application.
     QTimer::singleShot(timeout, QCoreApplication::instance(), SLOT(quit()));
 }
 
@@ -42,6 +43,7 @@ void DeviceReset::deviceInserted(Displax::Device* device)
         if(type == "Function" && (name == "dreset" || name == "reset"))
         {
             // Build Entity Function device reset and execute
+            // To create an entity we must indicate proto entity (obj) and context (device).
             Displax::EntityFunction func(obj, device, this);
             func.execute();
         }
