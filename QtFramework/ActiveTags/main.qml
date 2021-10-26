@@ -11,19 +11,19 @@ Entity {
 
     SessionManager {
         id: sm
-        QQ2.Component.onCompleted: sm.start(true);
+        QQ2.Component.onCompleted: sm.start(true); // We only want local DisplaxService / session
 
         // Handle sessions.
         property var ins: QQM.Instantiator {
             id: menu_device_sessions_instantiator
             model: sm.sessions
-            delegate: QQ2.Item {
+            delegate: QQ2.Item { // For each session found
                 id: menu_device_session
                 property var session: modelData
 
                 QQM.Instantiator {
                     model: modelData.devices
-                    delegate: QQ2.Item {
+                    delegate: QQ2.Item { // For each device from session
                         property var device: modelData
                     }
                     onObjectAdded: { // Select only local session/device
