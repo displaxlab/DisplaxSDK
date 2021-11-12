@@ -24,6 +24,7 @@ ApplicationWindow {
         clip: true
         ScrollBar.horizontal.interactive: true
         ScrollBar.vertical.interactive: true
+        contentHeight: my_computers_col.height
 
         Label{
             id: networkTitle
