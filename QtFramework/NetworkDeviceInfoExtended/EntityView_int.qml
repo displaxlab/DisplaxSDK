@@ -46,7 +46,8 @@ Item {
         Switch{
             position: src.value-src.min
             onPositionChanged: {
-                src.value = position+src.min;
+                if(src.value != position + src.min)
+                    src.value = position + src.min;
             }
         }
     }
@@ -54,9 +55,13 @@ Item {
     Component {
         id: switch2
         Switch {
-            position: (src.value-src.min)/2
             onPositionChanged : {
-                src.value = position+src.min;
+                var newPosition = src.value != 0 ? (src.value - src.min) / 2 : 0;
+                if(newPosition != position)
+                    src.value = position + src.min;
+            }
+            Component.onCompleted: {
+                position = src.value != 0 ? (src.value - src.min) / 2 : 0;
             }
         }
     }
@@ -68,7 +73,8 @@ Item {
             value: src.value
             to: src.max
             onValueChanged: {
-                src.value = value;
+                if(src.value != value)
+                    src.value = value;
             }
         }
     }
@@ -81,7 +87,8 @@ Item {
             to: src.max
             editable: true
             onValueChanged: {
-                src.value = value;
+                if(src.value != value)
+                    src.value = value;
             }
         }
     }

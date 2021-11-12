@@ -20,10 +20,11 @@ Item {
 
     // View interface
     Switch {
-        position: src.value? 1.0: 0.0
         onPositionChanged: {
-            src.value = position === 1.0? true : false;
+            src.value = position === 1.0 ? true : false;
+        }
+        Component.onCompleted: {
+            position = src.value ? 1.0 : 0.0;
         }
     }
 }
-
