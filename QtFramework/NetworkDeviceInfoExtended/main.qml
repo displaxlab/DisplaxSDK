@@ -88,19 +88,26 @@ ApplicationWindow {
                             model: modelData.devices
                             // For each device
                             Item {
+                                id: deviceItem
                                 width: 150
                                 height: 120
-                                signal openDevice
+                                signal openCloseDevice
 
-                                onOpenDevice: {
-                                    if(win)
-                                    {
-                                        win.close();
-                                        win.destroy();
-                                    }
-                                    var component = Qt.createComponent("DeviceWindow.qml");
-                                    win = component.createObject(modelData, {device: modelData});
-                                    win.show();
+                                Loader{
+                                    id: loader
+                                     onItemChanged: {
+                                         if (item)
+                                             item.onClosing.connect(function() {
+                                                 loader.sourceComponent = undefined
+                                             });
+                                     }
+                                }
+
+                                onOpenCloseDevice: {
+                                    if(!loader.sourceComponent)
+                                        loader.setSource("qrc:/DeviceWindow.qml", { device: modelData });
+                                    else
+                                        loader.sourceComponent = undefined
                                 }
 
                                 Canvas {
@@ -136,7 +143,7 @@ ApplicationWindow {
                                         width: 128
                                         device: modelData
                                     }
-                                    onClicked: parent.openDevice()
+                                    onClicked: parent.openCloseDevice()
                                 }
 
                                 Button {
@@ -144,8 +151,8 @@ ApplicationWindow {
                                     y: 120 - 33
                                     x: (parent.width-width)/2-10
                                     height: 40
-                                    text: "OPEN"
-                                    onClicked: parent.openDevice()
+                                    text: loader.item ? "CLOSE" : "OPEN"
+                                    onClicked: parent.openCloseDevice()
                                 }
                             }
                         }

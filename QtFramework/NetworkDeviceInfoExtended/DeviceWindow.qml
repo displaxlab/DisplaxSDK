@@ -7,6 +7,7 @@ Window {
     minimumWidth: 500
     maximumWidth: 500
     minimumHeight: 480
+    visible: true
     property var device: null
     title: "Displax " + device.productName + ": " + device.serialNumber
     Material.theme: Material.Dark
