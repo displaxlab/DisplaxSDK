@@ -16,6 +16,8 @@ public class ActiveTag : MonoBehaviour
     private GameObject tagObj;
     private ActiveTagColorEffect m_colorEffect;
     private Color m_color;
+    private Color m_color_buttons_unselected = new Color(0.8f, 0.8f, 0.8f);
+    private Color m_color_buttons_selected = new Color(0.6f, 0.6f, 0.9f);
     private int m_activebutton = -1;
     private DPXActiveOREngine activeOREngine;
 
@@ -55,6 +57,7 @@ public class ActiveTag : MonoBehaviour
             Quaternion rot = Quaternion.Euler(0, 0, angleDegrees);
             m_buttons[i] = Instantiate(m_buttonprefab, pos, rot);
             m_buttons[i].transform.parent = transform;
+            m_buttons[i].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_unselected;
         }
     }
 
@@ -134,50 +137,45 @@ public class ActiveTag : MonoBehaviour
                     {
                         case 0: 
                             m_colorEffect = ActiveTagColorEffect.FadeToColor;
-                            if (m_activebutton>= 0)
-                                m_buttons[m_activebutton].transform.localScale -= scaleDiff;
+                            if (m_activebutton >= 0)
+                                m_buttons[m_activebutton].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_unselected;
                             m_activebutton = 0;
-                            m_buttons[m_activebutton].transform.localScale += scaleDiff;
                             break;
                         case 1:
                             m_colorEffect = ActiveTagColorEffect.Blink;
                             if (m_activebutton >= 0)
-                                m_buttons[m_activebutton].transform.localScale -= scaleDiff;
+                                m_buttons[m_activebutton].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_unselected;
                             m_activebutton = 1;
-                            m_buttons[m_activebutton].transform.localScale += scaleDiff;
                             break;
                         case 2:
                             m_colorEffect = ActiveTagColorEffect.ShortPulse;
                             if (m_activebutton >= 0)
-                                m_buttons[m_activebutton].transform.localScale -= scaleDiff;
+                                m_buttons[m_activebutton].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_unselected;
                             m_activebutton = 2;
-                            m_buttons[m_activebutton].transform.localScale += scaleDiff;
                             break;
                         case 3:
                             m_colorEffect = ActiveTagColorEffect.TriangularWave;
                             if (m_activebutton >= 0)
-                                m_buttons[m_activebutton].transform.localScale -= scaleDiff;
+                                m_buttons[m_activebutton].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_unselected;
                             m_activebutton = 3;
-                            m_buttons[m_activebutton].transform.localScale += scaleDiff;
                             break;
                         case 4:
                             m_colorEffect = ActiveTagColorEffect.ToothSawWave;
                             if (m_activebutton >= 0)
-                                m_buttons[m_activebutton].transform.localScale -= scaleDiff;
+                                m_buttons[m_activebutton].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_unselected;
                             m_activebutton = 4;
-                            m_buttons[m_activebutton].transform.localScale += scaleDiff;
                             break;
                         case 5:
                             m_colorEffect = ActiveTagColorEffect.HeartBeat;
                             if (m_activebutton >= 0)
-                                m_buttons[m_activebutton].transform.localScale -= scaleDiff;
+                                m_buttons[m_activebutton].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_unselected;
                             m_activebutton = 5;
-                            m_buttons[m_activebutton].transform.localScale += scaleDiff;
                             break;
                         default:
                             m_colorEffect = ActiveTagColorEffect.FadeToColor;
                             break;
                     }
+                    m_buttons[m_activebutton].GetComponentInChildren<SpriteRenderer>().color = m_color_buttons_selected;
                     activeOREngine.SendTagColorEffect(m_tagData.tag_id, m_color, m_colorEffect, 2, 3000);
                     activeOREngine.SendTagVibrationEffect(m_tagData.tag_id, 1, 80, 50, 1, true);
                 }
