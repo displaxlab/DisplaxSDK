@@ -50,7 +50,7 @@ public class ActiveTag : MonoBehaviour
             float angle = i * Mathf.PI * 2 / numberOfObjects;
             float x = Mathf.Cos(angle) * radius;
             float y = Mathf.Sin(angle) * radius;
-            Vector3 pos = transform.position + new Vector3(x, y, 0);
+            Vector3 pos = transform.position + new Vector3(x, y, 1);
             float angleDegrees = angle * Mathf.Rad2Deg;
             Quaternion rot = Quaternion.Euler(0, 0, angleDegrees);
             m_buttons[i] = Instantiate(m_buttonprefab, pos, rot);
@@ -113,9 +113,9 @@ public class ActiveTag : MonoBehaviour
             // update tag position
             var spriteObj = transform.Find("TagSprite");
 
-            float b_x = m_buttonprefab.GetComponent<SpriteRenderer>().bounds.size.x;
-            float b_y = m_buttonprefab.GetComponent<SpriteRenderer>().bounds.size.y;
-            transform.position = Vector3.Slerp(transform.position, Camera.main.ScreenToWorldPoint(new Vector3((float)(tagData.x_calibrated+b_x/2), tagData.y_calibrated-b_y/2, 1)), Time.deltaTime * 20);
+            float b_x = m_buttonprefab.GetComponentInChildren<SpriteRenderer>().bounds.size.x;
+            float b_y = m_buttonprefab.GetComponentInChildren<SpriteRenderer>().bounds.size.y/2;
+            transform.position = Vector3.Slerp(transform.position, Camera.main.ScreenToWorldPoint(new Vector3(tagData.x_calibrated+b_x, tagData.y_calibrated-b_y, 1)), Time.deltaTime * 20);
 
             // update Sprite rotation
             if (spriteObj != null)

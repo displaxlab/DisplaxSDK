@@ -343,8 +343,8 @@ public class DPXActiveOREngine : MonoBehaviour
                                 }
                                 tag.x = (int)(((float)((float)widthScreenValue / (float)DPXConstants.DPX_ULTRA_RESOLUTION_X)) * (float)tag.x);
                                 tag.y = (int)(((float)((float)heightScreenValue / (float)DPXConstants.DPX_ULTRA_RESOLUTION_Y)) * (float)tag.y);
-                                tag.x_calibrated = ((int)(((float)((float)widthScreenValue / (float)DPXConstants.DPX_ULTRA_RESOLUTION_X)) * (float)tag.x_calibrated));
-                                tag.y_calibrated = ((int)(((float)((float)heightScreenValue / (float)DPXConstants.DPX_ULTRA_RESOLUTION_Y)) * (float)tag.y_calibrated));
+                                tag.x_calibrated = (int)((((float)((float)widthScreenValue / (float)DPXConstants.DPX_ULTRA_RESOLUTION_X)) * (float)tag.x_calibrated));
+                                tag.y_calibrated = (int)((((float)((float)heightScreenValue / (float)DPXConstants.DPX_ULTRA_RESOLUTION_Y)) * (float)tag.y_calibrated));
 
                                 if (invertXCalibratedCoords)
                                     tag.x_calibrated = widthScreenValue - tag.x_calibrated;
