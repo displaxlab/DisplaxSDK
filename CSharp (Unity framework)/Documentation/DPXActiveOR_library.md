@@ -18,6 +18,7 @@ To enable DPXActiveOR in an Unity application:
     - controller serial number: double check the connection with the right controller, by comparing it's serial number with the one defined here. Empty by default, so it can connects with the first controller available.
     - Invert X Calibrated Coords: depending on the target system orientation, display alignment, etc, this flag may help to configure the right orientation
     - Invert Y Calibrated Coords: depending on the target system orientation, display alignment, etc, this flag may help to configure the right orientation
+    - Invert Rotation: depending on the target system orientation, display alignment, etc, this flag may help to configure the right rotation direction (CW or CCW)
     - Only Valid Tag ID's: if a tag is placed on top of the sensor without being paired, activated (for instance, it may not be fully awake, or the pairing process is still going), or has the battery drained (and, thus, not operating/communicating), it can be reported as an "anonymous tag" (with an high value ID, greater than 65535). This flag disable/ignores the reports of such tags to the application.
     - Ignore Tap When Tag is Vibrating: As taps are detected by the internal accelerometer, the haptics vibration motor may trigger it and report a false tap. This flag helps to prevent this, by disabling the tap reports during vibration activity.
     - Tag_prefab: a prefab can be linked here to automate the tag object creation. Otherwise, tag object creation must be handled on tag report event/delegate handlers

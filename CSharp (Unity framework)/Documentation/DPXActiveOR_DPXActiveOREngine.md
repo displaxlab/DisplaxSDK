@@ -43,6 +43,10 @@ So, if any object class in the app wants to receive tag information/updates, it 
 
     public bool invertYCalibratedCoords = false;
 
+  **invertRotation** - Depending on app necessities, the reported tag rotation angle can be inverted by setting this property to true.
+  
+    public bool invertRotation = false;
+
 - **onlyValidTagIDs** - if a tag is detected on the sensor, but the BLE communication is not established (tag not paired and/or exiting sleep state), it is reported with an invalid ID (greater than 65535). These tag reports can be filtered out if this property is set to True (default). 
     public bool onlyValidTagIDs = true;
 
@@ -133,7 +137,7 @@ Parameters:
     public bool SetJoystickMode(int tag_id)
 ```
 - **SetNormalMode**
-- 
+
 Function to set normal operation  mode. 
 
 ```
