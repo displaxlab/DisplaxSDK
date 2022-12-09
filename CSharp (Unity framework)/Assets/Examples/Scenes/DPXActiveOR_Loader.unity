@@ -199,8 +199,9 @@ MonoBehaviour:
   controllerSerialNumber: 
   translateTagCoordsToScreenResolution: 1
   usePlayerWindowResolution: 0
-  invertXCalibratedCoords: 0
-  invertYCalibratedCoords: 1
+  invertXCalibratedCoords: 1
+  invertYCalibratedCoords: 0
+  invertRotation: 0
   onlyValidTagIDs: 1
   ignoreTapWhenTagIsVibrating: 1
   tag_prefab: {fileID: 4532842644569014295, guid: 7405338b584f61148bc8ca580cf52f49,

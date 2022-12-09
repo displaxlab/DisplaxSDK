@@ -33,6 +33,8 @@ public class DPXActiveOREngine : MonoBehaviour
     public bool invertXCalibratedCoords = true;
     public bool invertYCalibratedCoords = false;
 
+    public bool invertRotation = false;
+
     public bool onlyValidTagIDs = true;
     public bool ignoreTapWhenTagIsVibrating = true;
 
@@ -314,6 +316,11 @@ public class DPXActiveOREngine : MonoBehaviour
                         // convert rotation and tilt values from radians to degrees
                         tag.rotation = (int)(tag.rotation * (180 / Math.PI));
                         tag.rotation_calibrated = (int)(tag.rotation_calibrated * (180 / Math.PI));
+                        if (invertRotation)
+                        {
+                            tag.rotation = 360 - tag.rotation;
+                            tag.rotation_calibrated = 360 - tag.rotation_calibrated;
+                        }
                         tag.tilt_x = (int)(tag.tilt_x * (180 / Math.PI));
                         tag.tilt_y = (int)(tag.tilt_y * (180 / Math.PI));
                         tag.tilt_z = (int)(tag.tilt_z * (180 / Math.PI));

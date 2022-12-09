@@ -7,7 +7,7 @@ public class ActiveTag : MonoBehaviour
     // Instantiates prefabs in a circle formation
 
     public int numberOfObjects = 6;
-    public float radius = 65f;
+    public float radius = 45f;
 
     private DPXActiveTag m_tagData;
     private GameObject m_buttonprefab;
@@ -117,13 +117,13 @@ public class ActiveTag : MonoBehaviour
             var spriteObj = transform.Find("TagSprite");
 
             float b_x = m_buttonprefab.GetComponentInChildren<SpriteRenderer>().bounds.size.x;
-            float b_y = m_buttonprefab.GetComponentInChildren<SpriteRenderer>().bounds.size.y/2;
-            transform.position = Vector3.Slerp(transform.position, Camera.main.ScreenToWorldPoint(new Vector3(tagData.x_calibrated+b_x, tagData.y_calibrated-b_y, 1)), Time.deltaTime * 20);
+            float b_y = m_buttonprefab.GetComponentInChildren<SpriteRenderer>().bounds.size.y;
+
+            transform.position = Vector3.Slerp(transform.position, Camera.main.ScreenToWorldPoint(new Vector3(tagData.x_calibrated+b_x, tagData.y_calibrated+b_y-10, 1)), Time.deltaTime * 150);
 
             // update Sprite rotation
             if (spriteObj != null)
-                spriteObj.rotation = Quaternion.Euler(0, 0, 360 - tagData.rotation_calibrated);
-
+                spriteObj.rotation = Quaternion.Euler(0, 0, tagData.rotation_calibrated);
 
             // check angle range (to enable haptics, if necessary)
             int anglerange = 360 / numberOfObjects;
@@ -131,9 +131,7 @@ public class ActiveTag : MonoBehaviour
             {
                 if (activeOREngine != null)
                 {
-                    Vector3 scaleDiff =  new Vector3(5f, 5f, 0);
-
-                    switch (((int)(((360-tagData.rotation_calibrated+180)%360 + anglerange / 2) / anglerange))% numberOfObjects)
+                    switch (((int)(((tagData.rotation_calibrated + 180) % 360 + anglerange / 2) / anglerange)) % numberOfObjects)
                     {
                         case 0: 
                             m_colorEffect = ActiveTagColorEffect.FadeToColor;
