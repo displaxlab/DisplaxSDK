@@ -4,7 +4,7 @@
 #include <QDateTime>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QtNetwork>
+#include <QNetworkInterface>
 
 namespace Displax {
 
@@ -12,23 +12,28 @@ constexpr static const quint32 broadcast_port = 45001;
 
 DPXComPeerManager::DPXComPeerManager(DPXComManager* manager)
     : m_manager(manager)
+    , m_server_port(0)
+    , m_prefer_encode(DPXComStream::Cbor)
 {}
 
-void DPXComPeerManager::start(QHostAddress::SpecialAddress address)
+void DPXComPeerManager::start(QHostAddress::SpecialAddress address,
+                              const DPXComStream::EncodeType enc)
 {
+    m_prefer_encode = enc;
+    updateAddresses();
+
     QJsonObject obj;
     obj.insert("frame_type", "discovery");
     obj.insert("server_port", 0);
     obj.insert("type", "DesktopConnect");
     obj.insert("id", m_manager->id());
-    QJsonDocument doc(obj);
-    m_datagram = doc.toBinaryData();
 
-    updateAddresses();
+    m_datagram = DPXComStream::Writer::encode(obj, m_prefer_encode);
 
     m_broadcast_socket.bind(address, 0, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
-    connect(&m_broadcast_socket, SIGNAL(readyRead()), this, SLOT(readBroadcastDatagram()));
-    connect(&m_broadcast_timer, SIGNAL(timeout()), this, SLOT(sendBroadcastDatagram()));
+    connect(&m_broadcast_socket, &QUdpSocket::readyRead, this,
+            &DPXComPeerManager::readBroadcastDatagram);
+    connect(&m_broadcast_timer, &QTimer::timeout, this, &DPXComPeerManager::sendBroadcastDatagram);
     sendBroadcastDatagram();
     m_broadcast_timer.start(2000);
 }
@@ -63,11 +68,12 @@ void DPXComPeerManager::readBroadcastDatagram()
            == -1)
             continue;
 
-        QJsonDocument doc = QJsonDocument::fromBinaryData(datagram);
-        if(doc.isEmpty() && !doc.isObject())
+        DPXComStream::EncodeType type;
+        const QJsonObject obj = DPXComStream::Reader::decode(datagram, &type);
+
+        if(type == DPXComStream::Unknown || obj.isEmpty())
             continue;
 
-        QJsonObject obj = doc.object();
         if(!obj.contains("type") || obj.value("type").toString() != "Service")
             continue;
 
@@ -88,8 +94,10 @@ void DPXComPeerManager::readBroadcastDatagram()
         {
             auto connection = new DPXComConnection(DPXComUrl(sender_ip, sender_server_port),
                                                    m_manager);
+            connection->setEncodeType(m_prefer_encode);
             connection->setId(DPXComConnection::ID(obj.value("id").toString(), m_manager->id()));
-            connect(connection, SIGNAL(connected()), this, SLOT(establishConnection()));
+            connect(connection, &DPXComConnection::connected, this,
+                    &DPXComPeerManager::establishConnection);
             connection->connectToHost(sender_ip, sender_server_port);
             m_manager->addConnection(connection);
         }
@@ -99,18 +107,18 @@ void DPXComPeerManager::readBroadcastDatagram()
 void DPXComPeerManager::establishConnection()
 {
     DPXComConnection* c = dynamic_cast<DPXComConnection*>(QObject::sender());
-    if(c)
-    {
-        QJsonObject obj;
-        obj.insert("frame_type", "connection_info");
-        obj.insert("server_port", 0);
-        obj.insert("type", "DesktopConnect");
-        obj.insert("id", m_manager->id());
-        obj.insert("communication_port", c->localPort());
-        QJsonDocument doc(obj);
-        QByteArray datagram = doc.toBinaryData();
-        m_broadcast_socket.writeDatagram(datagram, c->peerAddress(), broadcast_port);
-    }
+    if(!c)
+        return;
+
+    QJsonObject obj;
+    obj.insert("frame_type", "connection_info");
+    obj.insert("server_port", 0);
+    obj.insert("type", "DesktopConnect");
+    obj.insert("id", m_manager->id());
+    obj.insert("communication_port", c->localPort());
+    const QJsonDocument doc(obj);
+    const QByteArray datagram = DPXComStream::Writer::encode(obj, m_prefer_encode);
+    m_broadcast_socket.writeDatagram(datagram, c->peerAddress(), broadcast_port);
 }
 
 void DPXComPeerManager::updateAddresses()

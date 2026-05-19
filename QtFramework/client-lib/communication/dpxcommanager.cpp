@@ -35,7 +35,7 @@ void DPXComManager::start(QHostAddress::SpecialAddress address)
 {
     m_listen_address = address;
     generateId();
-    m_peer_manager.start(address);
+    m_peer_manager.start(address, DPXComStream::Cbor);
 }
 
 void DPXComManager::stop()

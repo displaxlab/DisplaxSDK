@@ -17,15 +17,15 @@ DPXComConnection::DPXComConnection(const DPXComUrl& url, QObject* parent)
     : QObject(parent)
     , m_url(url)
     , m_socket()
+    , m_reader(&m_socket)
+    , m_writer(&m_socket)
 {
-    connect(&m_socket, SIGNAL(connected()), this, SIGNAL(connected()));
-    connect(&m_socket, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
-    connect(&m_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this,
-            SIGNAL(stateChanged(QAbstractSocket::SocketState)));
-    connect(&m_socket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-            SIGNAL(error(QAbstractSocket::SocketError)));
-    connect(&m_socket, SIGNAL(readyRead()), this, SIGNAL(readyRead()));
-    connect(&m_socket, SIGNAL(aboutToClose()), this, SIGNAL(aboutToClose()));
+    connect(&m_socket, &QTcpSocket::connected, this, &DPXComConnection::connected);
+    connect(&m_socket, &QTcpSocket::disconnected, this, &DPXComConnection::disconnected);
+    connect(&m_socket, &QTcpSocket::stateChanged, this, &DPXComConnection::stateChanged);
+    connect(&m_socket, &QTcpSocket::errorOccurred, this, &DPXComConnection::error);
+    connect(&m_socket, &QTcpSocket::readyRead, this, &DPXComConnection::readReadyData);
+    connect(&m_socket, &QTcpSocket::aboutToClose, this, &DPXComConnection::aboutToClose);
 }
 
 QHostAddress DPXComConnection::localAddress() const
@@ -55,7 +55,7 @@ quint16 DPXComConnection::peerPort() const
 
 QUrl DPXComConnection::requestUrl() const
 {
-    return QUrl::fromUserInput(peerAddress().toString() + ":" + QString::number(peerPort()));
+    return QUrl::fromUserInput(peerAddress().toString() % ":" % QString::number(peerPort()));
 }
 
 DPXComUrl DPXComConnection::url() const
@@ -109,7 +109,7 @@ bool operator==(const DPXComUrl& lhs, const DPXComConnection& rhs)
     return rhs == lhs;
 }
 
-void DPXComConnection::connectToHost(const QHostAddress& address, quint16 port)
+void DPXComConnection::connectToHost(const QHostAddress& address, const quint16 port)
 {
     m_socket.connectToHost(address, port);
 }
@@ -117,6 +117,38 @@ void DPXComConnection::connectToHost(const QHostAddress& address, quint16 port)
 void DPXComConnection::disconnectFromHost()
 {
     m_socket.disconnectFromHost();
+}
+
+QJsonObject DPXComConnection::readJson()
+{
+    if(m_reader.hasItems())
+        return m_reader.dequeue();
+    return QJsonObject();
+}
+
+void DPXComConnection::writeJson(const QJsonObject& obj)
+{
+    m_writer.enqueue(obj);
+}
+
+DPXComStream::EncodeType DPXComConnection::encodeType() const
+{
+    return m_writer.encodeType();
+}
+
+void DPXComConnection::setEncodeType(DPXComStream::EncodeType t)
+{
+    m_writer.setEncodeType(t);
+}
+
+void DPXComConnection::readReadyData()
+{
+    m_reader.reparse();
+    if(m_writer.encodeType() == DPXComStream::Unknown)
+        m_writer.setEncodeType(m_reader.encodeType());
+
+    if(m_reader.hasItems())
+        emit readyRead();
 }
 
 } // namespace Displax
