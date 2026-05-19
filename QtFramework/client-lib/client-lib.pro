@@ -4,7 +4,7 @@ QT += network quick qml
 TEMPLATE = lib
 DEFINES += DPX_CLIENT_LIB
 
-CONFIG += c++11
+CONFIG += c++23
 CONFIG += staticlib
 
 DEFINES += QT_DEPRECATED_WARNINGS
