@@ -1,6 +1,6 @@
 QT += network quick qml quickcontrols2 3dcore 3drender 3dinput 3dquick 3dquickextras
 
-CONFIG += c++11
+CONFIG += c++23
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
