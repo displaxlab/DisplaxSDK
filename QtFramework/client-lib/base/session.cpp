@@ -21,6 +21,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
+#include <QRegularExpression>
 #include <QTimer>
 #include <device.h>
 #include <entity.h>
@@ -30,8 +31,6 @@ namespace Displax {
 Session::Session(DPXComConnection* parent)
     : EntityContext(parent)
     , m_connection(parent)
-    , m_valid(true)
-    , m_id(0)
 {
     connect(m_connection, SIGNAL(readyRead()), this, SLOT(readyRead()));
     requestProtocolVersion();
@@ -169,18 +168,16 @@ void Session::sendNotifications()
     if(m_register_notifies.isEmpty() && m_unregister_notifies.isEmpty())
         return;
 
-    QJsonObject notifications;
-    notifications.insert("key", "notifications");
+    QJsonObject notifications({{"key", "notifications"}});
 
     if(!m_register_notifies.isEmpty())
     {
         QJsonArray arr;
-        foreach(auto const& ctx, m_register_notifies.keys())
+        for(const auto& ctx: m_register_notifies.keys())
         {
-            foreach(auto const& key, m_register_notifies[ctx])
+            for(const auto& key: m_register_notifies[ctx])
             {
-                QJsonObject obj;
-                obj.insert("key", key);
+                QJsonObject obj({{"key", key}});
                 if(ctx != "session")
                     obj.insert("device", ctx);
                 arr.append(obj);
@@ -193,12 +190,11 @@ void Session::sendNotifications()
     if(!m_unregister_notifies.isEmpty())
     {
         QJsonArray arr;
-        foreach(auto const& ctx, m_unregister_notifies.keys())
+        for(const auto& ctx: m_unregister_notifies.keys())
         {
-            foreach(auto const& key, m_unregister_notifies[ctx])
+            for(const auto& key: m_unregister_notifies[ctx])
             {
-                QJsonObject obj;
-                obj.insert("key", key);
+                QJsonObject obj({{"key", key}});
                 if(ctx != "session")
                     obj.insert("device", ctx);
                 arr.append(obj);
@@ -231,89 +227,57 @@ void Session::activateEntity(Entity* p)
 
 void Session::readyRead()
 {
-    m_data_received.append(m_connection->readAll());
-    while(!m_data_received.isEmpty() && m_valid)
+    while(m_valid)
     {
-        QJsonDocument doc = QJsonDocument::fromBinaryData(m_data_received);
-        if(doc.isNull())
+        const QJsonObject obj = m_connection->readJson();
+        if(obj.isEmpty())
             break;
-        parseNewData(doc);
-        int size = 0;
-        doc.rawData(&size);
-        m_data_received = m_data_received.right(m_data_received.size() - size);
+        parseNewData(obj);
     }
 }
 
-void Session::parseNewData(const QJsonDocument& doc)
+void Session::parseNewData(const QJsonObject& obj)
 {
-    if(!doc.isEmpty())
-    {
-        QJsonObject obj = doc.object();
-        //qDebug() << "parseNewData" << obj;
+    if(obj.contains("error"))
+        return;
 
-        if(!obj.contains("error"))
-        {
-            if(obj.contains("reactions"))
-                parseReactions(obj.value("reactions").toObject());
+    if(obj.contains("reactions"))
+        parseReactions(obj.value("reactions").toObject());
 
-            if(obj.contains("notifications"))
-                parseNotifications(obj.value("notifications").toObject());
+    if(obj.contains("notifications"))
+        parseNotifications(obj.value("notifications").toObject());
 
-            if(obj.contains("cli"))
-                emit receiveCli(obj.value("cli").toArray());
-        }
-    }
-    else
-    {
-        //qDebug() << "error on communication" << doc;
-    }
+    if(obj.contains("cli"))
+        emit receiveCli(obj.value("cli").toArray());
 }
 
 void Session::sendActions()
 {
-    if(!m_pending_actions.isEmpty() && m_valid)
-    {
-        QJsonObject actions;
-        QJsonObject obj;
-        QJsonDocument doc;
+    if(!m_valid || m_pending_actions.isEmpty())
+        return;
 
-        actions.insert("list", m_pending_actions);
-        obj.insert("actions", actions);
-        doc.setObject(obj);
-        m_connection->write(doc.toBinaryData());
+    const QJsonObject actions({{"list", m_pending_actions}});
+    m_connection->writeJson(QJsonObject({{"actions", actions}}));
 
-        m_pending_actions = QJsonArray();
-
-        //qDebug() << "send session actions" << obj;
-    }
+    m_pending_actions = QJsonArray();
 }
 
 void Session::sendCli(QJsonArray arr)
 {
-    if(!arr.isEmpty() && m_valid)
-    {
-        QJsonObject actions;
-        QJsonObject objAction;
-        QJsonDocument doc;
+    if(!m_valid || arr.isEmpty())
+        return;
 
-        actions.insert("parser", arr);
-        objAction.insert("cli", actions);
-
-        doc.setObject(objAction);
-
-        m_connection->write(doc.toBinaryData());
-
-        //qDebug() << "send obj actions" << objAction;
-    }
+    const QJsonObject actions({{"parser", arr}});
+    m_connection->writeJson(QJsonObject({{"cli", actions}}));
 }
 
 void Session::invalidate()
 {
-    if(m_valid)
-    {
-        m_valid = false;
-        emit validChanged();
-    }
+    if(!m_valid)
+        return;
+
+    m_valid = false;
+    emit validChanged();
 }
 
 void Session::removeDevice(const QString& serial_number)
@@ -321,64 +285,59 @@ void Session::removeDevice(const QString& serial_number)
     if(!m_valid)
         return;
 
-    if(m_devices.contains(serial_number))
+    if(!m_devices.contains(serial_number))
+        return;
+
+    Device* device = m_devices.take(serial_number);
+    m_devices_qml = m_devices.values();
+
+    auto i = m_active_actions.begin();
+    while(i != m_active_actions.end())
     {
-        Device* device = m_devices.take(serial_number);
-        m_devices_qml = m_devices.values();
-
-        auto i = m_active_actions.begin();
-        while(i != m_active_actions.end())
+        auto entity = i.value()->entity();
+        if(entity == nullptr || (entity && entity->context() == device))
         {
-            auto entity = i.value()->entity();
-            if(entity == nullptr || (entity && entity->context() == device))
-            {
-                auto tmp = i.value();
-                i = m_active_actions.erase(i);
-                delete tmp;
-            }
-            else
-                ++i;
+            auto tmp = i.value();
+            i = m_active_actions.erase(i);
+            delete tmp;
         }
-
-        device->invalidate();
-        emit deviceRemoved(device);
-        emit devicesChanged();
-        device->deleteLater();
+        else
+            ++i;
     }
+
+    device->invalidate();
+    emit deviceRemoved(device);
+    emit devicesChanged();
+    device->deleteLater();
 }
 
 void Session::parseReactions(const QJsonObject& reactions)
 {
-    QJsonArray arr = reactions.value("list").toArray();
+    const QJsonArray arr = reactions.value("list").toArray();
     for(auto i = arr.constBegin(), e = arr.constEnd(); i < e; ++i)
     {
-        QJsonObject o = i->toObject();
+        const QJsonObject o = i->toObject();
         if(o.contains("error"))
             continue;
 
-        Action* a = m_active_actions.take(o.value("id").toInt());
-        if(a)
+        if(Action* a = m_active_actions.take(o.value("id").toInt()); a)
         {
             a->deactivate(o.value("value"));
             a->deleteLater();
         }
         else if(o.value("key").toString() == "devices_all")
-        {
             parseDevicesAll(o);
-        }
         else if(o.value("key").toString() == "version")
-        {
             parseVersion(o.value("value"));
-        }
     }
 }
 
 void Session::parseNotifications(const QJsonObject& notifications)
 {
-    QJsonArray arr = notifications.value("list").toArray();
+    const QJsonArray arr = notifications.value("list").toArray();
     for(auto i = arr.constBegin(), e = arr.constEnd(); i != e; ++i)
     {
-        QJsonObject o = i->toObject();
+        const QJsonObject o = i->toObject();
         if(o.value("key") == "devices_list")
             requestDevicesAll();
         else if(o.contains("device"))
@@ -393,8 +352,7 @@ void Session::parseNotifications(const QJsonObject& notifications)
         }
         else
         {
-            auto e = getEntity(o.value("key").toString());
-            if(e)
+            if(auto e = getEntity(o.value("key").toString()); e)
                 e->fromJson(o.value("value"));
         }
     }
@@ -460,7 +418,7 @@ QHash<QString, Device*>* Session::devices()
 
 QQmlListProperty<Device> Session::devicesQml()
 {
-    return QQmlListProperty<Device>(this, m_devices_qml);
+    return QQmlListProperty<Device>(this, &m_devices_qml);
 }
 
 DPXComConnection* Session::connection() const
@@ -477,9 +435,7 @@ void Session::updateDevice(const QJsonObject& data)
 {
     const QString serial_number = data.value("serial_number").toString();
     if(m_devices.contains(serial_number))
-    {
         m_devices[serial_number]->updateJsonData(data);
-    }
     else
     {
         auto device = new Device(this);
@@ -494,19 +450,19 @@ void Session::parseDevicesAll(const QJsonObject& o)
     if(o.value("key") != "devices_all")
         return;
 
-    QJsonArray json_devices = o.value("value").toArray();
+    const QJsonArray json_devices = o.value("value").toArray();
     QStringList contexts = m_devices.keys();
 
     if(json_devices.isEmpty() && contexts.isEmpty())
         return;
 
-    for(const auto obj : o.value("value").toArray())
+    for(const auto obj: std::as_const(json_devices))
         contexts.removeOne(obj.toObject().value("serial_number").toString());
 
-    for(const auto& key : contexts)
+    for(auto& key: std::as_const(contexts))
         removeDevice(key);
 
-    for(const auto d : json_devices)
+    for(auto& d: std::as_const(json_devices))
         updateDevice(d.toObject());
 
     m_devices_qml = m_devices.values();
@@ -516,21 +472,22 @@ void Session::parseDevicesAll(const QJsonObject& o)
 
 void Session::parseVersion(const QJsonValue& v)
 {
-    QString value = v.toString().split("\n").first();
-    QRegExp rxlen("[\\w ]*(\\d+).(\\d+).(\\d+)");
-    int pos = rxlen.indexIn(value);
-    if(pos > -1)
+    static const QRegularExpression rxlen("[\\w ]*(\\d+).(\\d+).(\\d+)");
+    const QString value = v.toString().split("\n").first();
+    const QRegularExpressionMatch match = rxlen.match(value);
+
+    if(!match.hasMatch())
+        return;
+
+    const int version_major = match.captured(1).toInt();
+    m_version = (match.captured(1) + "." + match.captured(2) + "." + match.captured(3));
+    if(version_major == 1)
     {
-        int version_major = rxlen.cap(1).toInt();
-        m_version = (rxlen.cap(1) + "." + rxlen.cap(2) + "." + rxlen.cap(3));
-        if(version_major == 1)
-        {
-            firstRequest();
-            m_valid = true;
-        }
-        else
-            invalidate();
+        firstRequest();
+        m_valid = true;
     }
+    else
+        invalidate();
 }
 
 } // namespace Displax
