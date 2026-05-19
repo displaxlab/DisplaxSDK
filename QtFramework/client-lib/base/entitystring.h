@@ -11,7 +11,7 @@ class EntityString: public Entity
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(QString isWritable READ isWritable NOTIFY isWritableChanged)
+    Q_PROPERTY(bool isWritable READ isWritable NOTIFY isWritableChanged)
 
 public:
     explicit EntityString(QObject* parent = nullptr);

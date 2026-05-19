@@ -16,7 +16,7 @@ public:
     virtual ~EntityContext() = default;
 
     virtual void insertEntity(Entity* e) = 0;
-    virtual bool containsEntity(const QString& namme) = 0;
+    virtual bool containsEntity(const QString& name) = 0;
     virtual Entity* getEntity(const QString& name) = 0;
     virtual void removeEntity(Entity* e) = 0;
 

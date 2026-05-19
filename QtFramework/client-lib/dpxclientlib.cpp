@@ -22,8 +22,8 @@ void Displax::registerQmlTypes()
     qmlRegisterType<Displax::SessionManager>("com.displax.sdk", major, minor, "SessionManager");
     qmlRegisterType<Displax::Device>("com.displax.sdk", major, minor, "Device");
 
-    qmlRegisterUncreatableType<Displax::Entity>("com.displax.sdk", major, minor, "Entity",
-                                                "Can not instantiate Entity in qml");
+    qmlRegisterUncreatableType<Displax::Entity>("com.displax.sdk", major, minor, "DPXEntity",
+                                                "Can not instantiate DPXEntity in qml");
     qmlRegisterUncreatableType<Displax::EntityContext>("com.displax.sdk", major, minor,
                                                        "EntityContext",
                                                        "Can not instantiate Entity in qml");
