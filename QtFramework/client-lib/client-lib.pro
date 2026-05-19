@@ -27,6 +27,7 @@ SOURCES += \
     communication/dpxcomconnection.cpp \
     communication/dpxcommanager.cpp \
     communication/dpxcompeermanager.cpp \
+    communication/dpxcomstream.cpp \
     communication/dpxcomurl.cpp \
     base/device.cpp \
     base/entity.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     communication/dpxcomconnection.h \
     communication/dpxcommanager.h \
     communication/dpxcompeermanager.h \
+    communication/dpxcomstream.h \
     communication/dpxcomurl.h \
     base/device.h \
     base/entity.h \
