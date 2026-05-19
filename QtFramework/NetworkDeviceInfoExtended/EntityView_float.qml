@@ -1,12 +1,12 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
-import com.displax.sdk 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import com.displax.sdk
 
 Item {
     id: int_root
-    property var proto;
-    property var context;
+    property var proto
+    property var context
     anchors.fill: parent
 
     // Entity float controller
@@ -15,14 +15,13 @@ Item {
 
         Component.onCompleted: {
             updateProtoEntity(proto); // set proto entity
-            context = int_root.context // set device context
+            context = int_root.context; // set device context
         }
 
         onInitialisedChanged: {
-            if(initialised && !dirty)
-            {
+            if (initialised && !dirty) {
                 // For normalized values load slider, otherwise load spin box.
-                if(max-min===1)
+                if (max - min === 1)
                     my_loader.sourceComponent = slider;
                 else
                     my_loader.sourceComponent = spinBox;
