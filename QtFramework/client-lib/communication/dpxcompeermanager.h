@@ -2,6 +2,7 @@
 #define DPXCOMPEERMANAGER_H
 
 #include <dpxcomconnection.h>
+#include <dpxcomstream.h>
 #include <QList>
 #include <QObject>
 #include <QString>
@@ -18,8 +19,12 @@ class DPXComPeerManager: public QObject
 
 public:
     explicit DPXComPeerManager(DPXComManager* manager);
-    void start(QHostAddress::SpecialAddress address);
+    void start(QHostAddress::SpecialAddress address, const DPXComStream::EncodeType enc);
     void stop();
+
+    void setServerPort(quint16 port);
+
+    DPXComStream::EncodeType preferEncode() const;
 
 signals:
     void newConnection(DPXComConnection* connection);
@@ -39,6 +44,8 @@ private:
     QUdpSocket m_broadcast_socket;
     QTimer m_broadcast_timer;
     QByteArray m_datagram;
+    quint16 m_server_port;
+    DPXComStream::EncodeType m_prefer_encode;
 };
 
 } // namespace Displax

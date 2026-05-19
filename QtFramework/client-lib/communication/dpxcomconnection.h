@@ -1,7 +1,9 @@
 #ifndef DPXCOMCONNECTION_H
 #define DPXCOMCONNECTION_H
 
+#include <dpxcomstream.h>
 #include <dpxcomurl.h>
+#include <QJsonObject>
 #include <QObject>
 #include <QTcpSocket>
 #include <displaxclientlib_global.h>
@@ -17,7 +19,7 @@ public:
     {
         ID() = default;
         inline ID(const QString& a, const QString& b)
-            : QPair(a, b)
+            : QPair<QString, QString>(a, b)
         {}
         inline bool operator==(const ID& rhs) const
         {
@@ -43,6 +45,12 @@ public:
     quint64 write(const QByteArray& data);
     void flush();
 
+    QJsonObject readJson();
+    void writeJson(const QJsonObject& obj);
+
+    DPXComStream::EncodeType encodeType() const;
+    void setEncodeType(DPXComStream::EncodeType t);
+
     ID id() const;
     void setId(const ID& id);
 
@@ -59,13 +67,18 @@ signals:
     void aboutToClose();
 
 public slots:
-    void connectToHost(const QHostAddress& address, quint16 port);
+    void connectToHost(const QHostAddress& address, const quint16 port);
     void disconnectFromHost();
+
+private slots:
+    void readReadyData();
 
 protected:
     DPXComUrl m_url;
     ID m_id;
     QTcpSocket m_socket;
+    DPXComStream::Reader m_reader;
+    DPXComStream::Writer m_writer;
 };
 
 bool operator==(const DPXComUrl& lhs, const DPXComConnection& rhs);
