@@ -17,8 +17,7 @@ ApplicationWindow {
     property variant win: null;
 
     onClosing: {
-        if(win)
-        {
+        if (win) {
             win.close();
             win.destroy();
         }
@@ -73,15 +72,16 @@ ApplicationWindow {
 
                             ComputerIcon {
                                 id: icon
-                                x: (parent.width-width)/2
+                                x: (parent.width - width) / 2
                                 z: 1
                             }
 
                             Label {
                                 y: 120 - height
-                                x: (parent.width-width)/2
+                                x: (parent.width - width) / 2
                                 id: pc_title
-                                text: modelData.isLocal ? "localhost": modelData.url.replace("::ffff:","").split(":")[0]
+                                text: modelData.isLocal ? "localhost" :
+                                                          modelData.url.replace("::ffff:","").split(":")[0]
                             }
                         }
 
@@ -99,21 +99,21 @@ ApplicationWindow {
                                      onItemChanged: {
                                          if (item)
                                              item.onClosing.connect(function() {
-                                                 loader.sourceComponent = undefined
+                                                 loader.sourceComponent = undefined;
                                              });
                                      }
                                 }
 
                                 onOpenCloseDevice: {
-                                    if(!loader.sourceComponent)
+                                    if (!loader.sourceComponent)
                                         loader.setSource("qrc:/DeviceWindow.qml", { device: modelData });
                                     else
-                                        loader.sourceComponent = undefined
+                                        loader.sourceComponent = undefined;
                                 }
 
                                 Canvas {
-                                    x: -(index==0? 65: 165)
-                                    width: parent.width*2;
+                                    x: -(index === 0 ? 65 : 165)
+                                    width: parent.width * 2;
                                     height: parent.height
                                     contextType: "2d"
 

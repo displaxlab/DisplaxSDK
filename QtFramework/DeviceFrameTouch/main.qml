@@ -1,8 +1,8 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.12
-import QtQml 2.12
-import QtQuick.Layouts 1.12
+import QtQml
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
 import com.displax.sdk 1.0
 
 ApplicationWindow {
@@ -19,11 +19,11 @@ ApplicationWindow {
 
     SessionManager {
         id: sm
-        Component.onCompleted: sm.start(false);
+        Component.onCompleted: sm.start(false)
     }
 
     property var device_obj: null
-    property var device_view: null;
+    property var device_view: null
 
     // Populate Menu with sessions and devices
     menuBar: MenuBar {
@@ -50,33 +50,33 @@ ApplicationWindow {
                                 property var device: modelData
                                 text: modelData.productName + ": " + modelData.serialNumber
                                 onTriggered: {
-                                    device_obj = device
+                                    device_obj = device;
                                 }
                             }
-                            onObjectAdded: {
-                                menu_device_session.insertItem(index, object)
-                                if(device_obj === null)
-                                    device_obj = object.device
+                            onObjectAdded: (index, object) => {
+                                menu_device_session.insertItem(index, object);
+                                if (device_obj === null)
+                                    device_obj = object.device;
                             }
-                            onObjectRemoved: {
-                                menu_device_session.removeItem(object)
-                                if(device_obj === object.device)
-                                    device_obj = null
+                            onObjectRemoved: (index, object) => {
+                                menu_device_session.removeItem(object);
+                                if (device_obj === object.device)
+                                    device_obj = null;
                             }
                         }
                     }
-                    onObjectAdded: {
-                        menu_device_sessions.insertMenu(index, object)
+                    onObjectAdded: (index, object) => {
+                        menu_device_sessions.insertMenu(index, object);
                     }
-                    onObjectRemoved: {
-                        menu_device_sessions.removeMenu(object)
-                        if(device_obj && !device_obj.valid)
-                            device_obj = null
+                    onObjectRemoved: (index, object) => {
+                        menu_device_sessions.removeMenu(object);
+                        if (device_obj && !device_obj.valid)
+                            device_obj = null;
                     }
                 }
             }
 
-            MenuSeparator { }
+            MenuSeparator {}
             MenuItem {
                 text: qsTr("&Quit")
                 onTriggered: Qt.quit()
@@ -85,7 +85,10 @@ ApplicationWindow {
 
         Menu {
             title: qsTr("&Help")
-            Action { text: qsTr("&About"); onTriggered: about.open() }
+            Action {
+                text: qsTr("&About")
+                onTriggered: about.open()
+            }
         }
     }
 
@@ -108,16 +111,17 @@ ApplicationWindow {
     }
 
     onDevice_objChanged: {
-        if(device_view)
-        {
+        if (device_view) {
             device_view.destroy();
             device_view = null;
         }
-        if(device_obj && device_obj.valid)
-        {
+
+        if (device_obj && device_obj.valid) {
             var component = Qt.createComponent("DeviceView.qml");
             if (component.status === Component.Ready)
-                device_view = component.createObject(main_view, { device: device_obj});
+                device_view = component.createObject(main_view, {
+                    device: device_obj
+                });
         }
     }
 }

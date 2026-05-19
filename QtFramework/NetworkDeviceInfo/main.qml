@@ -1,9 +1,9 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.14
-import QtQuick.Controls.Material 2.14
-import QtQml 2.14
-import QtQuick.Layouts 1.14
-import com.displax.sdk 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQml
+import QtQuick.Layouts
+import com.displax.sdk
 
 ApplicationWindow {
     visible: true
@@ -14,9 +14,9 @@ ApplicationWindow {
     Material.accent: Material.Indigo
 
     // Instantiate Displax Session Manager
-    SessionManager{
+    SessionManager {
         id: sm
-        Component.onCompleted: sm.start(false);
+        Component.onCompleted: sm.start(false)
     }
 
     ScrollView {
@@ -26,7 +26,7 @@ ApplicationWindow {
         ScrollBar.vertical.interactive: true
         contentHeight: my_computers_col.height
 
-        Label{
+        Label {
             id: networkTitle
             color: Material.frameColor
             font.pixelSize: 25
@@ -36,16 +36,16 @@ ApplicationWindow {
         }
 
         Column {
-            y: networkTitle.height
             id: my_computers_col
+            y: networkTitle.height
             padding: 5
             spacing: 10
             Repeater {
                 model: sm.sessions
                 // for each Session
                 Rectangle {
-                    x: 30
                     id: item_data
+                    x: 30
                     width: computers_elem.width
                     height: 130
                     radius: 5
@@ -55,22 +55,22 @@ ApplicationWindow {
                         id: computers_elem
                         spacing: 50
                         padding: 5
-                        Item{
+                        Item {
                             id: pc_desc
                             width: 100
                             height: 120
 
-                            ComputerIcon{
+                            ComputerIcon {
                                 id: icon
-                                x: (parent.width-width)/2
+                                x: (parent.width - width) / 2
                                 z: 1
                             }
 
-                            Label{
-                                y: 120 - height
-                                x: (parent.width-width)/2
+                            Label {
                                 id: pc_title
-                                text: modelData.isLocal ? "localhost": modelData.url.replace("::ffff:","").split(":")[0]
+                                y: 120 - height
+                                x: (parent.width - width) / 2
+                                text: modelData.isLocal ? "localhost" : modelData.url.replace("::ffff:", "").split(":")[0]
                             }
                         }
 
@@ -82,20 +82,26 @@ ApplicationWindow {
                                 height: 120
 
                                 Canvas {
-                                    x: -(index==0? 65: 165)
-                                    width: parent.width*2;
+                                    x: -(index === 0 ? 65 : 165)
+                                    width: parent.width * 2
                                     height: parent.height
                                     contextType: "2d"
 
                                     Path {
                                         id: myPath
-                                        startX: 0; startY: 90
-                                         PathLine { x: 34+(index==0? 65: 165); y: 90 }
-                                         PathArc {
-                                                x: 64+(index==0? 65: 165); y: 75
-                                                radiusX: 30; radiusY: 20
-                                                direction: PathArc.Counterclockwise
-                                            }
+                                        startX: 0
+                                        startY: 90
+                                        PathLine {
+                                            x: 34 + (index == 0 ? 65 : 165)
+                                            y: 90
+                                        }
+                                        PathArc {
+                                            x: 64 + (index === 0 ? 65 : 165)
+                                            y: 75
+                                            radiusX: 30
+                                            radiusY: 20
+                                            direction: PathArc.Counterclockwise
+                                        }
                                     }
 
                                     onPaint: {
@@ -106,15 +112,15 @@ ApplicationWindow {
                                     }
                                 }
 
-                                SensorIcon{
+                                SensorIcon {
                                     width: 128
                                     label: modelData.productName
                                 }
 
-                                Label{
+                                Label {
                                     id: my_label
                                     y: 120 - height
-                                    x: (parent.width-width)/2
+                                    x: (parent.width - width) / 2
                                     text: "SN: " + modelData.serialNumber
                                 }
                             }
@@ -123,19 +129,25 @@ ApplicationWindow {
 
                     Canvas {
                         x: -30
-                        y: index==0? 0: -100
-                        width: 30;
-                        height: index==0?130:230
+                        y: index === 0 ? 0 : -100
+                        width: 30
+                        height: index === 0 ? 130 : 230
                         contextType: "2d"
                         Path {
                             id: myPath2
-                            startX: 15; startY: 0
-                             PathLine { x: 15; y: (index==0?0:100) + 35 }
-                             PathArc {
-                                    x: 30; y: (index==0?0:100) + 65
-                                    radiusX: 15; radiusY: 30
-                                    direction: PathArc.Counterclockwise
-                                }
+                            startX: 15
+                            startY: 0
+                            PathLine {
+                                x: 15
+                                y: (index === 0 ? 0 : 100) + 35
+                            }
+                            PathArc {
+                                x: 30
+                                y: (index === 0 ? 0 : 100) + 65
+                                radiusX: 15
+                                radiusY: 30
+                                direction: PathArc.Counterclockwise
+                            }
                         }
 
                         onPaint: {
@@ -145,7 +157,6 @@ ApplicationWindow {
                             context.stroke();
                         }
                     }
-
                 }
             }
         }
