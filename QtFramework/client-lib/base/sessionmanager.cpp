@@ -56,7 +56,7 @@ void SessionManager::stop()
     disconnect(m_com_manager, SIGNAL(removedConnection(DPXComConnection*)), this,
                SLOT(removeConnection(DPXComConnection*)));
 
-    for(auto s : m_sessions)
+    for(auto& s: m_sessions)
     {
         s->invalidate();
         emit sessionRemoved(s);
@@ -79,10 +79,7 @@ void SessionManager::start(bool local)
     connect(m_com_manager, SIGNAL(removedConnection(DPXComConnection*)), this,
             SLOT(removeConnection(DPXComConnection*)));
 
-    if(local)
-        m_com_manager->start(QHostAddress::LocalHost);
-    else
-        m_com_manager->start(QHostAddress::Any);
+    m_com_manager->start(local ? QHostAddress::LocalHost : QHostAddress::Any);
 }
 
 QList<Session*> SessionManager::sessions()
@@ -92,7 +89,7 @@ QList<Session*> SessionManager::sessions()
 
 QQmlListProperty<Session> SessionManager::sessionsQml()
 {
-    return QQmlListProperty<Session>(this, m_sessions_qml);
+    return QQmlListProperty<Session>(this, &m_sessions_qml);
 }
 
 } // namespace Displax

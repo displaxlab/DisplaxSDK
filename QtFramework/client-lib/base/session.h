@@ -27,7 +27,7 @@ public:
     virtual ~Session();
 
     void insertEntity(Entity* e) override;
-    bool containsEntity(const QString& namme) override;
+    bool containsEntity(const QString& name) override;
     Entity* getEntity(const QString& name) override;
     void removeEntity(Entity* e) override;
     void activateEntity(Entity* e) override;
@@ -72,26 +72,25 @@ private slots:
 private:
     void parseDevicesAll(const QJsonObject& o);
     void parseVersion(const QJsonValue& v);
-    void parseNewData(const QJsonDocument& doc);
+    void parseNewData(const QJsonObject& obj);
     void parseReactions(const QJsonObject& reactions);
     void parseNotifications(const QJsonObject& notifications);
     void requestDevicesAll();
     void requestProtocolVersion();
     void updateDevice(const QJsonObject& data);
-    void removeDevice(const QString& serialNumber);
+    void removeDevice(const QString& serial_number);
 
     DPXComConnection* m_connection;
     QHash<QString, Device*> m_devices;
     QList<Device*> m_devices_qml;
-    bool m_valid;
-    int m_id;
+    bool m_valid = true;
+    int m_id = 0;
     QString m_version;
     QJsonArray m_pending_actions;
     QHash<quint32, Action*> m_active_actions;
     QHash<QString, QSet<QString>> m_register_notifies;
     QHash<QString, QSet<QString>> m_unregister_notifies;
     QHash<QString, Entity*> m_entities;
-    QByteArray m_data_received;
 };
 
 } // namespace Displax
