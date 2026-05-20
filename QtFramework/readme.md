@@ -1,6 +1,8 @@
 # Displax C++ (Qt framework) SDK & Examples
 
-Displax C++ (Qt framework) SDK is a small library, intended for application development using C++ and Qt 5 framework, that provides access to Displax Service.
+Displax C++ (Qt framework) SDK is a small library, intended for application development using C++ and Qt 6 framework, that provides access to Displax Service.
+
+We recommend the use of Qt 6.8 or above.
 
 This SDK provide library source code and simple examples.
 The project is in qmake.
@@ -22,6 +24,10 @@ __Examples__:
 * [Device Frame Touch](DeviceFrameTouch/readme.md)
 * [Active Tags](ActiveTags/readme.md)
 
-> :warning: **You must try examples sequentially to gain knowledge about how the system works**
+> [!WARNING]
+>
+> **You must try examples sequentially to gain knowledge about how the system works**
 
-> :warning: **Displax Service isn't compatible with Qt 5.15.**
+> [!WARNING]
+>
+> **Displax Service isn't compatible with Qt 5.15.**
