@@ -63,23 +63,43 @@ bool DPXComManager::hasConnection(const DPXComConnection::ID& id) const
 
 void DPXComManager::addConnection(DPXComConnection* connection)
 {
-    if(!m_connections.contains(connection))
-    {
-        m_connections << connection;
-        connect(connection, SIGNAL(disconnected()), this, SLOT(connectionClosed()));
-        emit addedConnection(connection);
-    }
+    if(m_connections.contains(connection))
+        return;
+
+    m_connections << connection;
+    connect(connection, &DPXComConnection::disconnected, this, &DPXComManager::connectionClosed);
+    emit addedConnection(connection);
 }
 
 void DPXComManager::removeConnection(DPXComConnection* connection)
 {
-    if(m_connections.contains(connection))
+    if(connection == nullptr)
+        return;
+
+    if(!m_connections.removeOne(connection))
+        return;
+
+    emit removedConnection(connection);
+
+    switch(connection->state())
     {
-        m_connections.removeOne(connection);
-        connection->disconnectFromHost();
-        emit removedConnection(connection);
-        // TODO: fix this hard nail
-        QTimer::singleShot(1000, connection, SLOT(deleteLater()));
+        case QAbstractSocket::UnconnectedState: connection->deleteLater(); break;
+
+        case QAbstractSocket::ConnectedState:
+        case QAbstractSocket::BoundState:
+        case QAbstractSocket::ListeningState:
+            connect(connection, &DPXComConnection::disconnected, connection,
+                    &DPXComConnection::deleteLater, Qt::SingleShotConnection);
+            connection->disconnectFromHost();
+            break;
+
+        case QAbstractSocket::HostLookupState:
+        case QAbstractSocket::ConnectingState:
+        case QAbstractSocket::ClosingState:
+        default:
+            connection->abort();
+            connection->deleteLater();
+            break;
     }
 }
 

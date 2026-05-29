@@ -83,6 +83,11 @@ void DPXComConnection::flush()
     m_socket.flush();
 }
 
+void DPXComConnection::abort()
+{
+    m_socket.abort();
+}
+
 DPXComConnection::ID DPXComConnection::id() const
 {
     return m_id;

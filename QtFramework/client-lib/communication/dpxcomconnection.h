@@ -44,6 +44,7 @@ public:
     QByteArray readAll();
     quint64 write(const QByteArray& data);
     void flush();
+    void abort();
 
     QJsonObject readJson();
     void writeJson(const QJsonObject& obj);
