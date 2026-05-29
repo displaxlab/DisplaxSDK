@@ -61,13 +61,13 @@ signals:
     void protoEntitiesChanged();
 
 private:
-    int m_product_id;
-    QString m_type;
+    int m_product_id = 0;
+    QString m_type = "None";
     QString m_product_name;
     QString m_serial_number;
     QString m_version;
     QJsonArray m_proto_entities;
-    bool m_valid;
+    bool m_valid = false;
     QHash<QString, Entity*> m_entities;
 };
 

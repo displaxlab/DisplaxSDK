@@ -7,15 +7,13 @@ DeviceReset::DeviceReset(int timeout, QObject* parent)
     : QObject(parent)
 {
     // After timeout, in milliseconds, quit application.
-    QTimer::singleShot(timeout, QCoreApplication::instance(), SLOT(quit()));
+    QTimer::singleShot(timeout, QCoreApplication::instance(), &QCoreApplication::quit);
 }
 
 void DeviceReset::sessionInserted(Displax::Session* session)
 {
-    connect(session, SIGNAL(deviceInserted(Displax::Device*)), this,
-            SLOT(deviceInserted(Displax::Device*)));
-    connect(session, SIGNAL(deviceRemoved(Displax::Device*)), this,
-            SLOT(deviceRemoved(Displax::Device*)));
+    connect(session, &Displax::Session::deviceInserted, this, &DeviceReset::deviceInserted);
+    connect(session, &Displax::Session::deviceRemoved, this, &DeviceReset::deviceRemoved);
 }
 
 void DeviceReset::deviceInserted(Displax::Device* device)

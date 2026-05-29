@@ -20,12 +20,9 @@ namespace Displax {
 
 Device::Device(Session* parent)
     : EntityContext(parent)
-    , m_product_id(0)
-    , m_type("None")
-    , m_valid(false)
 {
-    if(parent)
-        connect(parent, SIGNAL(validChanged()), this, SIGNAL(validChanged()));
+    if(parent != nullptr)
+        connect(parent, &Session::validChanged, this, &Device::validChanged);
 }
 
 Device::~Device()

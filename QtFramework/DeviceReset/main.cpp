@@ -9,8 +9,8 @@ int main(int argc, char* argv[])
     Displax::SessionManager sm;
     DeviceReset device_reset;
     // Link SessionManager to DeviceReset
-    sm.connect(&sm, SIGNAL(sessionInserted(Displax::Session*)), &device_reset,
-               SLOT(sessionInserted(Displax::Session*)));
+    sm.connect(&sm, &Displax::SessionManager::sessionInserted, &device_reset,
+               &DeviceReset::sessionInserted);
 
     // Queue SessionManager to discovery local service and connect to it.
     sm.start();

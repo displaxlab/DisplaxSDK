@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     PrintInfo pf;
 
     // Link SessionManager to PrintInfo
-    sm.connect(&sm, SIGNAL(sessionInserted(Displax::Session*)), &pf, SLOT(sessionInserted(Displax::Session*)));
+    sm.connect(&sm, &Displax::SessionManager::sessionInserted, &pf, &PrintInfo::sessionInserted);
 
     // Queue SessionManager to discovery local service and connect to it.
     sm.start();
@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 void PrintInfo::start()
 {
     m_message = "No service found";
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    connect(&m_timer, &QTimer::timeout, this, &PrintInfo::timeout);
     m_timer.start(2000);
 }
 
@@ -49,7 +49,7 @@ void PrintInfo::sessionInserted(Displax::Session* s)
 {
     m_timer.stop();
     m_session = s;
-    connect(s, SIGNAL(devicesChanged()), this, SLOT(devicesChanged()));
+    connect(s, &Displax::Session::devicesChanged, this, &PrintInfo::devicesChanged);
     QTextStream out(stdout);
     out << "Local session found\n";
     m_message = "No device found";
