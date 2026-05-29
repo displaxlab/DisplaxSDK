@@ -32,7 +32,7 @@ Session::Session(DPXComConnection* parent)
     : EntityContext(parent)
     , m_connection(parent)
 {
-    connect(m_connection, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(m_connection, &DPXComConnection::readyRead, this, &Session::readyRead);
     requestProtocolVersion();
 }
 

@@ -7,15 +7,15 @@ DeviceSettings::DeviceSettings(QObject* parent)
     : QObject(parent)
     , m_state(Begin)
 {
-    connect(&m_settings_handle, SIGNAL(finished()), this, SLOT(runStateOperation()));
-    connect(&m_settings_handle, SIGNAL(downloadFinished(const QByteArray&)), this,
-            SLOT(downloadFinished(const QByteArray&)));
+    connect(&m_settings_handle, &Displax::EntitySettings::finished, this,
+            &DeviceSettings::runStateOperation);
+    connect(&m_settings_handle, &Displax::EntitySettings::downloadFinished, this,
+            &DeviceSettings::downloadFinished);
 }
 
 void DeviceSettings::sessionInserted(Displax::Session* session)
 {
-    connect(session, SIGNAL(deviceInserted(Displax::Device*)), this,
-            SLOT(deviceInserted(Displax::Device*)));
+    connect(session, &Displax::Session::deviceInserted, this, &DeviceSettings::deviceInserted);
 }
 
 /*!

@@ -9,8 +9,8 @@ int main(int argc, char* argv[])
     Displax::SessionManager sm;
     DeviceSettings settings;
 
-    sm.connect(&sm, SIGNAL(sessionInserted(Displax::Session*)), &settings,
-               SLOT(sessionInserted(Displax::Session*)));
+    sm.connect(&sm, &Displax::SessionManager::sessionInserted, &settings,
+               &DeviceSettings::sessionInserted);
 
     // Queue SessionManager to discovery local service and connect to it.
     sm.start();

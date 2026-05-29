@@ -50,11 +50,10 @@ void SessionManager::removeConnection(DPXComConnection* connection)
   */
 void SessionManager::stop()
 {
-    disconnect(m_com_manager, SIGNAL(addedConnection(DPXComConnection*)), this,
-               SLOT(addConnection(DPXComConnection*)));
+    disconnect(m_com_manager, &DPXComManager::addedConnection, this, &SessionManager::addConnection);
 
-    disconnect(m_com_manager, SIGNAL(removedConnection(DPXComConnection*)), this,
-               SLOT(removeConnection(DPXComConnection*)));
+    disconnect(m_com_manager, &DPXComManager::removedConnection, this,
+               &SessionManager::removeConnection);
 
     for(auto& s: m_sessions)
     {
@@ -74,10 +73,9 @@ void SessionManager::stop()
   */
 void SessionManager::start(bool local)
 {
-    connect(m_com_manager, SIGNAL(addedConnection(DPXComConnection*)), this,
-            SLOT(addConnection(DPXComConnection*)));
-    connect(m_com_manager, SIGNAL(removedConnection(DPXComConnection*)), this,
-            SLOT(removeConnection(DPXComConnection*)));
+    connect(m_com_manager, &DPXComManager::addedConnection, this, &SessionManager::addConnection);
+    connect(m_com_manager, &DPXComManager::removedConnection, this,
+            &SessionManager::removeConnection);
 
     m_com_manager->start(local ? QHostAddress::LocalHost : QHostAddress::Any);
 }

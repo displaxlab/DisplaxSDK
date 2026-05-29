@@ -42,7 +42,7 @@ QJsonObject Action::activate()
             else
                 obj.insert("value", v);
         }
-        connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeoutCallback()));
+        connect(&m_timer, &QTimer::timeout, this, &Action::timeoutCallback);
         m_timer.setInterval(e->timeout());
         m_timer.setSingleShot(true);
         m_timer.start();
